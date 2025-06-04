@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: stonescale;
+
+  margin: none;
+  padding: none;
+  overflow-x: hidden;
+}
+
+body{
+  overflow-x: hidden;
+}
+html{
+  overflow-x: hidden;
+}
+
+[readonly]{
+  cursor: auto;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@layer components{
+  .table{
+    @apply bg-white w-full;
+  }
+  .table-header{
+    @apply bg-white border-t-2 border-stone-100;
+  }
+  .table-body{
+    @apply bg-white;
+  }
+  .table-rows{
+    @apply border-b-2 border-stone-100;
+  }
+  .table-header-cell{
+    @apply border-e-2 border-stone-100 text-left font-semibold text-sm text-neutral-500; 
+  }
+  .table-cell{
+    @apply border-e-2 border-stone-100 text-left text-sm;
+  }
+  .table-add-row{
+    @apply border-b-2 border-stone-100;
+  }
+  .input-cell{
+    @apply py-1.5 px-3 w-full bg-transparent rounded-lg focus:bg-pink-50 focus:shadow-lg focus:-translate-y-1 focus:ring-2 ring-pink-400 transition duration-150 ease-in-out;
+  }
+  select{
+    @apply py-1 px-2 rounded-md hover:bg-stone-100 focus:bg-stone-100
+  }
+}
+
+/* Style for resizable columns */
+.resizable {
+  position: relative;
+  /* overflow: hidden; */
+}
+
+.resizer {
+  transition: all 0.5s ease-in-out;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 5px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 1;
+  border-right: 2px solid;
+  border-color: #f472b500;
+}
+.resizer:hover, .resizer:active {
+  border-right: 4px solid;
+  border-color: #f472b6;
+}
+
+::selection {
+  background-color: #f472b6;
+  color: white;
+}
+
+select{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: none;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg width='16' height='16' fill='gray' xmlns='http://www.w3.org/2000/svg'><path d='M4 6l4 4 4-4'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1em;
+  padding-right: 2em;
+}
