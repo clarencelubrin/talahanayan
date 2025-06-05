@@ -1,0 +1,12 @@
+{
+    "rewrites": [
+        {
+            "source": "/bookkeeperAPI/:path*",
+            "destination": "https://bookkeeper-api-henna.vercel.app/:path*"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/"
+        }
+    ]
+}
