@@ -28,6 +28,7 @@
     "redux-undo": "^1.1.0",
     "vercel": "^41.3.0",
     "vite-plugin-vercel": "^9.0.4",
+    "yarn": "^1.22.22",
     "zod": "^3.24.1",
     "zundo": "^2.3.0",
     "zustand": "^5.0.3"

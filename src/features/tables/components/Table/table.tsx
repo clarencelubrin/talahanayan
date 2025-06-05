@@ -48,14 +48,14 @@ export function DataTable({ table_data, document_id, sheet_name, table_index, se
     const handleAddRow = () => {
         _handleAddRow();
     }
-    const handleAddRowatIndex = async (index: number) => {
+    const handleAddRowatIndex = (index: number) => {
         if (isPending) return; // Prevent adding row while transition is pending
-        setScriptDisabled(true); // Disable script before adding row
+        // setScriptDisabled(true); // Disable script before adding row
         startTransition(() => {
             _handleAddRowatIndex(index);
         });
-        await new Promise(resolve => setTimeout(resolve, 50)); // Wait for state to update
-        setScriptDisabled(false); // Re-enable script after adding row
+        // await new Promise(resolve => setTimeout(resolve, 50)); // Wait for state to update
+        // setScriptDisabled(false); // Re-enable script after adding row
     }
     useEffect(() => {
     // Update zustand store when state changes

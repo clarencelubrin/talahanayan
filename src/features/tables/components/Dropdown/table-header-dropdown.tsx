@@ -25,20 +25,34 @@ export function TableHeaderDropdown({column, isOpen, value, dropdownRef, column_
     const removeColumn = useDataStore(state => state.removeColumn);
     const setTable = useDataStore(state => state.setTable);
 
+    // useEffect(() => {
+    //     // Register to the dropdown list if it is open
+    //     if (isOpen) {
+    //         setDropdownList((prev) => {
+    //             return [...prev, dropdownRef.current as HTMLElement];
+    //         });
+    //     }
+    //     // Else, remove from the list
+    //     else {
+    //         setDropdownList((prev) => {
+    //             return prev.filter((value) => value !== dropdownRef.current);
+    //         });
+    //     }
+    // }, [isOpen]);
+
     useEffect(() => {
-        // Register to the dropdown list if it is open
-        if (isOpen) {
-            setDropdownList((prev) => {
-                return [...prev, dropdownRef.current as HTMLElement];
-            });
-        }
-        // Else, remove from the list
-        else {
-            setDropdownList((prev) => {
-                return prev.filter((value) => value !== dropdownRef.current);
-            });
-        }
-    }, [isOpen]);
+    const dropdownElement = dropdownRef.current;
+    if (!dropdownElement) return;
+
+        setDropdownList(prev => {
+            if (isOpen && !prev.includes(dropdownElement)) {
+                return [...prev, dropdownElement];
+            } else if (!isOpen && prev.includes(dropdownElement)) {
+                return prev.filter(el => el !== dropdownElement);
+            }
+            return prev;
+        });
+    }, [isOpen, dropdownRef]);
 
     useEffect(() => {
         setText(value)
