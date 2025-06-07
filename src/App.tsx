@@ -5,11 +5,12 @@ import { Toast } from 'features/pop-ups/components/toast/toast';
 import { ToastType, ToastVariantType } from './features/pop-ups/types/toast/toast-types';
 import { ColumnDrawer } from 'src/features/pop-ups/components/drawer/column-drawer';
 import { useDrawer, useDrawerType } from 'src/features/pop-ups/hooks/drawer/useDrawer';
-import { createContext, useEffect } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { AuthProvider } from './shared/api/api-auth';
 import { getPage } from './shared/components/Route/route-listener';
 import 'src/App.css'
+import { Loading } from './shared/components/Loading/loading';
 
 type AppContextType = {
   addToast: (message: string | undefined, type: ToastVariantType) => void;
@@ -31,15 +32,26 @@ export const AppContext = createContext<AppContextType>({
 function App() {
   const { toast, addToast, setIsVisible } = useToast();
   const { drawer, openDrawer, closeDrawer } = useDrawer();
+  const [isLoading, setIsLoading] = useState(false);
   const initDataAsync = useInitDataAsync()
   const navigate = useNavigate();
 
   // Initialize data
   useEffect(() => {
-    initDataAsync().then((success) => {
-      if (success) navigate(getPage() || "/home");
-    });
-  }, [])
+    const initData = async () => {
+      setIsLoading(true);
+      const success = await initDataAsync();
+      let page = getPage();
+      if (page === "/") page = '';
+      if (success) navigate(page || "/home");
+      setIsLoading(false);
+    };
+    initData();
+  }, []);
+
+
+  if(isLoading)
+    return (<Loading />)
 
   return (
       <AppContext.Provider value={{ addToast, toast, drawer, openDrawer, closeDrawer }}>
