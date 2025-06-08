@@ -28,38 +28,42 @@ export function TabTable({ document_id, setScreenScrollDisabled }: TabTableProps
         if(drawer?.is_visible) closeDrawer();
     }, [selected_sheet])
     return (
-        <div className='flex flex-col gap-4'>
-            <div className='border-b border-stone-150'>
-                <div className='flex flex-row ms-4 gap-1 overflow-x-auto scrollbar-hide'>
+        <div className='flex flex-col'>
+            <div className='border-b border-stone-200'>
+                <div className='flex flex-row px-4 gap-1 overflow-x-auto scrollbar-hide'>
                     {sheetNames.map((sheet_name, index) => (
+                        // <div className='border border-b-pink-500'>
                         <button onClick={()=>setSelectedSheet(index)} key={index} 
-                            className={`px-3 py-1.5 border-t border-s border-e text-truncate whitespace-nowrap
+                            className={`px-3 py-1.5 border-t border-s border-e text-truncate whitespace-nowrap 
                                 ${selected_sheet === index ? 
-                                    'bg-pink-50 text-pink-500 border-pink-100' : 
-                                    'bg-stone-50 text-stone-500 border-stone-100'} 
-                                hover:bg-pink-100 hover:text-pink-500 font-semibold text-sm rounded-t-lg 
+                                    'bg-pink-100 text-pink-500 border-pink-100 border-b-pink-400 border-b-2' : 
+                                    'bg-stone-100 text-stone-500 border-stone-100'} 
+                                hover:bg-pink-100 hover:text-pink-500
+                                active:bg-pink-200 active:text-pink-600 active:translate-y-1
+                                font-semibold text-sm rounded-t-lg 
                                 transition duration-150 ease-in-out`}>
                             {sheet_name}
-                        </button>
+                        </button>                            
+                        // </div>
                     ))}
                 </div>
             </div>            
             <AnimatePresence initial={false} mode="wait" onExitComplete={()=>null}>
             <motion.div
                 key={selected_sheet}                    
-                className='flex flex-col gap-1'
+                className='flex flex-col gap-1 pt-4 pb-6'
             >
             {current_sheet.map((table, currentTable) => (
-                    <DataTable 
-                        key={currentTable}
-                        table_data={table} 
-                        document_id={document_id} 
-                        sheet_name={sheetNames[selected_sheet]} 
-                        setSheetScrollDisabled={setScreenScrollDisabled} 
-                        table_index={currentTable}
-                    />                    
+                <DataTable 
+                    key={currentTable}
+                    table_data={table} 
+                    document_id={document_id} 
+                    sheet_name={sheetNames[selected_sheet]} 
+                    setSheetScrollDisabled={setScreenScrollDisabled} 
+                    table_index={currentTable}
+                />                    
             ))}    
-            </motion.div>
+            </motion.div> 
             </AnimatePresence>            
             {current_sheet.length === 0 && <p>No tables found</p>}
         </div>

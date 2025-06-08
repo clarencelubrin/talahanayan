@@ -35,7 +35,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const initDataAsync = useInitDataAsync()
   const navigate = useNavigate();
-
+  const is_mobile = window.matchMedia('(max-width: 639px)').matches;
   // Initialize data
   useEffect(() => {
     const initData = async () => {
@@ -58,7 +58,7 @@ function App() {
         <AuthProvider>
         <Outlet />
         {/* Pop-up overlays */}
-        <div className="fixed bottom-0 right-0 p-4 gap-4 flex flex-col z-50">
+        <div className={`fixed ${!is_mobile ? 'bottom-0 right-0' : 'bottom-0 left-1/2 transform -translate-x-1/2 items-center'} p-4 gap-4 flex flex-col z-50`}>
           <Toast type={toast.type} is_visible={toast.is_visible} setIsVisible={setIsVisible}>
             {toast.message}
           </Toast>

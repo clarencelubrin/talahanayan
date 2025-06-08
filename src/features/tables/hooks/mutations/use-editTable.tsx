@@ -42,7 +42,7 @@ export function useEditTable({
     const handleAddRowatIndex = async (index: number) => {
         addRowatIndex(document_id, sheet_name, table_index, new Array(content.headers.length).fill(''), index);
         setIsHoveredList(produce(is_hovered_list, draft => {
-            draft.splice(index, 0, false);
+            draft.splice(index + 1, 0, false);
         }));
         if (is_checked_all) {
             // Reset checked_list and is_checked_all

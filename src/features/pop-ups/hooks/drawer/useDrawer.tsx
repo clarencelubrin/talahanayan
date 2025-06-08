@@ -15,6 +15,7 @@ export function useDrawer(){
     const [drawer, setDrawer] = useState<useDrawerType | undefined>(undefined);
 
     useOnClick((event: MouseEvent) => {
+        event.stopPropagation();
         const drawerElement = document.getElementById('drawer');
         const button = document.getElementById('table-header-dropdown-edit');
         if (drawerElement && !drawerElement.contains((event.target as Node)) && button && !button.contains((event.target as Node))) {

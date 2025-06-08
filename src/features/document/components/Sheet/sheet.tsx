@@ -19,8 +19,10 @@ export function Sheet({document_id, sheet_name, setScrollDisabled}: {document_id
 
     return(
         sheet_data ? (
-            <div className='flex flex-col'> 
-                <SheetTitleInput sheet_name={sheet_name} document_id={document_id} className='px-1 p-4 sm:px-16 px-8'/>
+            <div className='min-h-screen w-full'> 
+                <div className='mx-auto p-4 sm:px-14 px-8 sm:pt-10 pt-6 flex flex-col'>
+                    <SheetTitleInput sheet_name={sheet_name} document_id={document_id}/>
+                </div>
                 {sheet_data?.tables.map((table, index) => (
                     <DataTable key={index} table_data={table} document_id={document_id} sheet_name={sheet_name} table_index={index} setSheetScrollDisabled={setScrollDisabled}/>
                 ))}                 

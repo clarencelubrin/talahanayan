@@ -8,6 +8,7 @@ export type tableDataInterface = {
 export type headerRowType = {
     children?: React.ReactNode
     className?: string
+    ref?: React.RefObject<HTMLDivElement>
     onMouseEnter?: () => void
     onMouseLeave?: () => void
 }
@@ -16,7 +17,7 @@ export type rowType = {
     className?: string
     onMouseEnter?: () => void
     onMouseLeave?: () => void
-    ref: React.RefObject<HTMLDivElement>
+    ref?: React.RefObject<HTMLDivElement>
 }
 
 export type headerCellType = {

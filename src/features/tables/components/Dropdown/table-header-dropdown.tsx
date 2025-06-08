@@ -41,8 +41,8 @@ export function TableHeaderDropdown({column, isOpen, value, dropdownRef, column_
     // }, [isOpen]);
 
     useEffect(() => {
-    const dropdownElement = dropdownRef.current;
-    if (!dropdownElement) return;
+        const dropdownElement = dropdownRef.current;
+        if (!dropdownElement) return;
 
         setDropdownList(prev => {
             if (isOpen && !prev.includes(dropdownElement)) {
@@ -52,6 +52,9 @@ export function TableHeaderDropdown({column, isOpen, value, dropdownRef, column_
             }
             return prev;
         });
+        return () => {
+            setDropdownList(prev => prev.filter(el => el !== dropdownElement));
+        }
     }, [isOpen, dropdownRef]);
 
     useEffect(() => {

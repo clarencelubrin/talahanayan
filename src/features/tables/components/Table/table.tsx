@@ -63,6 +63,7 @@ export function DataTable({ table_data, document_id, sheet_name, table_index, se
     }, [table_data, document_id, sheet_name, table_index]);
 
     useEffect(() => {
+        console.log('dropdown_list changed:', dropdown_list);
         if (dropdown_list.length > 0) {
             setScrollDisabled(true);
             setSheetScrollDisabled(true);

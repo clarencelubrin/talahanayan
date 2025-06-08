@@ -124,7 +124,7 @@ export function HeaderHoverOptions({ is_hovered, checked_list, setCheckAll, row_
             exit='exit'
         >
             <div className="flex flex-row gap-2 items-center">
-                <div className='w-[18px]'></div>
+                <div className='w-[24px]'></div>
                 <input type="checkbox" className="checkbox-primary scale-110" onChange={() => handleOnCheck()} checked={check_value}/>
             </div>
         </motion.div>

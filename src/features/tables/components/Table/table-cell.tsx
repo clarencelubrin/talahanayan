@@ -37,7 +37,9 @@ function DataHeaderCell({column_index, header, settings, widths_list, setWidthLi
     });
     
     return (
-    <div className='relative flex flex-row hover:bg-stone-50 transition duration-100 ease-in-out resizable select-none' 
+    <div 
+        className='relative flex flex-row hover:bg-stone-100 hover:cursor-pointer active:bg-stone-200 
+            transition duration-100 ease-in-out resizable select-none' 
         style={{width: widths_list[column_index]}} 
         ref={ref} 
     >

@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { FilePlus2, FileUp, FileJson2, FileSpreadsheet, Save, SquareFunction, Sheet } from 'lucide-react';
+import { FilePlus2, FileUp, FileJson2, FileSpreadsheet, Save, SquareFunction, Sheet, LogOut } from 'lucide-react';
 import { Dropdown } from 'shared/ui/Dropdown/dropdown-ui';
 import { NavButton, NavToggle } from 'shared/ui/Buttons/nav-button';
 import { useDataStore } from 'src/store';
 import { useCreateNewDocument, useExportDocument } from 'src/shared/api/api-route';
-
+import { useAuth } from 'src/shared/api/api-auth';
 type DropdownProps = {
     document_id: string;
     isOpen: boolean;
@@ -17,8 +17,14 @@ export function DocumentDropdown({isOpen, document_id, handleSaveDocument}: Drop
     const [isScriptMenuOpen, setIsScriptMenuOpen] = useState(false);
     const createNewDocument = useCreateNewDocument();
     const { exportJSON, exportExcel } = useExportDocument();
+    const { logOut } = useAuth();
+    const handleOnLogOut = () => {
+        logOut();
+        localStorage.removeItem('username');
+    }
+
     return (
-        <Dropdown isOpen={isOpen} align='right'>
+        <Dropdown isOpen={isOpen} align='left' className='top-[56px] left-2'>
             <div className='rounded-md bg-white drop-shadow-lg border border-stone-200 min-w-48'>
                 <div className="flex flex-col p-1 gap-1">
                     <NavButton icon={FilePlus2} onClick={createNewDocument.mutateAsync}>
@@ -48,6 +54,10 @@ export function DocumentDropdown({isOpen, document_id, handleSaveDocument}: Drop
                             Auto-Fill Ledger
                         </NavButton>               
                     </div>}   
+                    <hr />
+                    <NavButton icon={LogOut} onClick={handleOnLogOut}>
+                    Log-out
+                </NavButton>
                 </div>
             </div>
 

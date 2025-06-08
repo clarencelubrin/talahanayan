@@ -1,14 +1,21 @@
-import { useEffect } from "react"
+import { useEffect, useRef } from "react";
 
-export function useOnClick(func = (_: MouseEvent) => {}, deps: React.DependencyList = []) {
+export function useOnClick(callback: (event: MouseEvent) => void, deps: any[] = []) {
+    const callbackRef = useRef(callback);
+
+    // Keep ref updated with the latest function
     useEffect(() => {
-        const handleDocumentClick = (event: MouseEvent) => {
-            func(event);
+        callbackRef.current = callback;
+    }, [callback]);
+
+    useEffect(() => {
+        const handleClick = (event: MouseEvent) => {
+            callbackRef.current(event);
         };
 
-        document.addEventListener("click", handleDocumentClick);
+        document.addEventListener("click", handleClick);
         return () => {
-            document.removeEventListener("click", handleDocumentClick);
+            document.removeEventListener("click", handleClick);
         };
-    }, [deps]);
+    }, [...deps]);
 }

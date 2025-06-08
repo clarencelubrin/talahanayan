@@ -7,17 +7,21 @@ type RegisterDropdownProps = {
 }
 export function useRegisterDropdown({isOpen, dropdownRef, setDropdownList}: RegisterDropdownProps) {
     useEffect(() => {
-        // Register to the dropdown list if it is open
+        const currentDropdown = dropdownRef.current as HTMLElement | null;
+        if (!currentDropdown) return;
+
         if (isOpen) {
             setDropdownList((prev) => {
-                return [...prev, dropdownRef.current as HTMLElement];
+                // Avoid duplicates
+                if (prev.includes(currentDropdown)) return prev;
+                return [...prev, currentDropdown];
             });
+        } else {
+            setDropdownList((prev) => prev.filter((value) => value !== currentDropdown));
         }
-        // Else, remove from the list
-        else {
-            setDropdownList((prev) => {
-                return prev.filter((value) => value !== dropdownRef.current);
-            });
-        }
-    }, [isOpen]);
+        // Cleanup: always remove on unmount
+        return () => {
+            setDropdownList((prev) => prev.filter((value) => value !== currentDropdown));
+        };
+    }, [isOpen, dropdownRef, setDropdownList]);
 }

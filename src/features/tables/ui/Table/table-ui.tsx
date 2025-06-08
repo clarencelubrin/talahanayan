@@ -33,11 +33,13 @@ function TableBody({children}: childrenType) {
         </div>
     )
 }
-function HeaderRow({children, className='', onMouseEnter, onMouseLeave}: headerRowType) {
+function HeaderRow({children, className='', ref, onMouseEnter, onMouseLeave}: headerRowType) {
     return (
         <div className={`table-rows flex flex-row w-full ${className}`}
             onMouseEnter={onMouseEnter} 
-            onMouseLeave={onMouseLeave}>
+            onMouseLeave={onMouseLeave}
+            ref={ref}
+        >
             {children}
         </div>
     )

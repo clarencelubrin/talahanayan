@@ -1,34 +1,29 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router';
-import { HomeIcon, SquareLibrary, BookMarked, Plus, SquareUserRound, PanelRightOpen, PanelRightClose } from 'lucide-react';
-import { useCreateNewDocument } from 'shared/api/api-route';
+import { HomeIcon, SquareLibrary, BookMarked, PanelRightOpen, PanelRightClose, ChevronDown } from 'lucide-react';
+// import { useCreateNewDocument } from 'shared/api/api-route';
 import { NavButton } from 'shared/ui/Buttons/nav-button';
-import { BasicSkeleton } from 'shared/ui/Skeleton/default-skeleton';
+import { MicroIconButton } from 'features/document/ui/Buttons/icon-button';
 // import { useGetActiveUser } from 'shared/api/api-route';
 import { IconButton } from 'src/features/document/ui/Buttons/icon-button';
 import { DocumentItemGroup } from 'features/document/components/Sidebar/sidebar-section';
-import { SidebarUserDropdown } from 'src/features/auth/components/Dropdown/sidebar-user-dropdown';
+// import { SidebarUserDropdown } from 'src/features/auth/components/Dropdown/sidebar-user-dropdown';
 import { useDataStore } from 'src/store';
+import tala from "src/assets/Tala.png";
+import { DocumentDropdown } from "src/features/tables/components/Dropdown/document-dropdown"
+import { DocumentContext } from 'src/features/document/pages/document-layout';
+import { useSaveDocument } from 'src/shared/api/api-route';
 
 export function Sidebar({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>>}) {
-    const [isOpenDropdown, setIsOpenDropdown] = useState(false);
+    const [show_logo_dropdown, setShowLogoDropdown] = useState(false);
+    const { document_id } = useContext(DocumentContext);
     const navigate = useNavigate();
-    const createNewDocument = useCreateNewDocument();
-    // const getActiveUser = useGetActiveUser();
+    const saveDocument = useSaveDocument();
+    const getDocument = useDataStore(state=>state.getDocument)
     const data = useDataStore(state => state.data);
 
-    // useEffect(() => {
-    //     if(localStorage.getItem('username') || localStorage.getItem('username') === '' || localStorage.getItem('username') === 'undefined'){
-    //         let { data: user } = getActiveUser
-    //         if (user) {
-    //             localStorage.setItem('username', user.username || '');
-    //         };
-    //     }
-    // }, []);
-
     // Detect swipe left to close sidebar
-
     useEffect(() => {
         localStorage.setItem('is_sidebar_open', isOpen ? 'true' : 'false');
     }, [isOpen]);
@@ -64,9 +59,15 @@ export function Sidebar({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: React.
     const handleOnClickHome = () => {
         navigate('/home');
     }
-    const handleOnClickNewDocument = async () => {
-        await createNewDocument.mutateAsync()
+    const handleSaveDocument = async () => {
+        await saveDocument.mutateAsync({
+            document: getDocument(document_id || ''),
+            document_id: document_id || ''
+        });
     }
+    // const handleOnClickNewDocument = async () => {
+    //     await createNewDocument.mutateAsync()
+    // }
     return (
         <>
         <AnimatePresence
@@ -75,7 +76,9 @@ export function Sidebar({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: React.
             onExitComplete={()=>null}
         >
         {isOpen &&
-        <motion.div className='sm:min-w-64 min-w-full h-screen bg-stone-50 p-2 select-none'
+        <motion.div 
+            className='max-lg:absolute max-lg:top-0 max-lg:left-0 max-lg:z-50 max-lg:shadow-lg
+                sm:max-w-64 w-full max-w-full h-screen bg-white select-none border border-r-stone-200'
             key="sidebar"
             initial={{x: -300}}
             animate={{x: 0, transition: { ease: "easeInOut" }}}
@@ -83,37 +86,38 @@ export function Sidebar({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: React.
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
         >
-            <div className="flex flex-col w-full gap-1">
-                <div className='relative w-full'>
-                    <NavButton icon={SquareUserRound} onClick={()=>setIsOpenDropdown(!isOpenDropdown)} hasHover={false}
-                    className='w-full hover:bg-stone-100 hover:text-stone-500 transition duration-150 ease-in-out'    
-                    >
-                        @{localStorage.getItem('username')}
-                    </NavButton>      
-                    <SidebarUserDropdown isOpen={isOpenDropdown} />
+            <div className="flex flex-col w-full gap-1 relative">
+                <div className='relative'>
+                    <div className='p-4 flex flex-row gap-1 color-pink-500' onClick={() => setShowLogoDropdown(!show_logo_dropdown)}>
+                        <img src={tala} alt="Tala Logo" className="h-[32px] hover:scale-110 active:scale-125 transition duration-300 ease-in-out"/>
+                        <MicroIconButton className='hover:bg-transparent'
+                            icon={ChevronDown} 
+                            color='text-pink-500 hover:bg-pink-100'
+                            iconClassName={`transition-transform ${(!show_logo_dropdown) ? '-rotate-90': ''}`} />
+                    </div>                    
+                    <DocumentDropdown document_id={document_id || ''} isOpen={show_logo_dropdown} handleSaveDocument={handleSaveDocument}/>
                 </div>
-                <NavButton icon={HomeIcon} onClick={()=>handleOnClickHome()}>Home</NavButton>
-                <NavButton icon={SquareLibrary}>Library</NavButton>
-                <NavButton icon={BookMarked}>Documentation</NavButton>
-                <p className='px-2 mt-4 py-1 text-xs font-bold text-stone-400'>Documents</p>
-                {data?.map((doc, index) => (
-                <DocumentItemGroup key={index} doc={doc} />
-                ))}
-                {!data &&
-                <>
-                    <BasicSkeleton className='w-full h-6'/> 
-                    <BasicSkeleton className='w-full h-6'/> 
-                    <BasicSkeleton className='w-full h-6'/> 
-                </>}
-                <NavButton icon={Plus} onClick={() => handleOnClickNewDocument()}>Create New</NavButton>
+
+                <div className='px-3 pb-4 flex flex-col gap-1 max-w-full'>
+                    <p className='px-2 text-xs font-bold text-stone-400'>Menu</p>
+                    <NavButton icon={HomeIcon} onClick={()=>handleOnClickHome()}><span className='truncate'>Home</span></NavButton>
+                    <NavButton icon={SquareLibrary}><span className='truncate'>Library</span></NavButton>
+                    <NavButton icon={BookMarked}><span className='truncate'>Documentation</span></NavButton>                    
+                </div>
+                <div className='px-3 pb-4 flex flex-col gap-1 max-w-full'>
+                    <p className='px-2 text-xs font-bold text-stone-400'>Documents</p>
+                    {data?.map((doc, index) => (
+                    <DocumentItemGroup key={index} doc={doc} setIsSidebarOpen={setIsOpen}/>
+                    ))}                   
+                </div>
             </div>
         </motion.div>}
         </AnimatePresence>
-        <div className="absolute bottom-4 left-4 z-50 sm:p-2 p-1 visible">
+        <div className="absolute bottom-3 left-3 z-50 sm:p-2 p-1 visible">
             <IconButton
             icon={isOpen ? PanelRightOpen : PanelRightClose}
-            onClick={() => { isOpen ? setIsOpen(false) : setIsOpen(true) }}
-            className='p-1 bg-white shadow-md'
+            onClick={() => { setIsOpen(!isOpen) }}
+            className='p-1 bg-white shadow-md border border-stone-200'
             />
         </div>
         </>

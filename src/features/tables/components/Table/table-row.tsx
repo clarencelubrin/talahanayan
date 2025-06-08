@@ -64,28 +64,42 @@ export function DataHeaderRow({
     const setColumnWidths = useDataStore(state => state.setColumnWidths);
     const { document_id, sheet_name, table_index } = useContext(TableInfoContext);
     const [is_hovered, setIsHovered] = useState(false);
+    const showHoverOptions = is_hovered || checked_list.length > 0;
 
     const handleOnMouseUpResizer = () => {
         // Update column widths in zustand store when resizer is released
         setColumnWidths(document_id, sheet_name, table_index, width_list);
     }
+    // useEffect(() => {
+    //     console.log('TRIGGERED');
+    //     setIsHovered(false);
+    // }, [content.rows.length]);
 
-    useEffect(() => {
-        // If any row is checked, show hover options
-        if(checked_list.length > 0) {
-            setIsHovered(true);
-        } else {
-            setIsHovered(false);
-        }
-    }, [checked_list])
+    // useEffect(() => {
+    //     // If any row is checked, show hover options
+    //     if(checked_list.length > 0) {
+    //         setIsHovered(true);
+    //     } else {
+    //         setIsHovered(false);
+    //     }
+    //     return () => {
+    //         // Cleanup function to reset hover state
+    //         setIsHovered(false);
+    //     }
+    // }, [checked_list])
 
     return (
+        <div
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className="relative"
+            >
         <HeaderRow className='relative'
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}>
 
             <HoverOptionCell>
-                <HeaderHoverOptions is_hovered={is_hovered} setCheckAll={setCheckAll} checked_list={checked_list} row_length={content.rows.length}/>
+                <HeaderHoverOptions is_hovered={showHoverOptions} setCheckAll={setCheckAll} checked_list={checked_list} row_length={content.rows.length}/>
             </HoverOptionCell>
 
             {content.headers.map((header, index) => (
@@ -95,11 +109,15 @@ export function DataHeaderRow({
 
             <div className='flex flex-row items-center'>
                 <button className='flex justify-center items-center h-full aspect-square hover:bg-stone-100' 
-                    onClick={() => addColumn(document_id, sheet_name, table_index, new Array(content.rows.length).fill(''))}>
+                    onClick={() => {
+                        setIsHovered(false);
+                        addColumn(document_id, sheet_name, table_index, new Array(content.rows.length).fill(''))
+                    }}>
                     <Plus size={16} strokeWidth={2} color='#9ca3af' />
                 </button>
             </div>
         </HeaderRow>
+        </div>
     )
 }
 

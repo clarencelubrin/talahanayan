@@ -32,11 +32,10 @@ export function HomePage(){
     }
 
     return (
-        <div className="min-h-screen">
-            <div className="bg-stone-50 p-3">
-                <div className="h-6"></div>  
-                <div className="max-w-[80vw] mx-auto p-5">
-                    <h1 className="text-2xl font-semibold text-stone-500">Create new file</h1>
+        <div className="min-h-screen flex flex-col gap-3">
+            <div className="bg-stone-100 h-[50vh] flex items-center border-b border-stone-200">
+                <div className="max-w-[80vw] mx-auto w-full">
+                    <h1 className="text-2xl font-semibold text-stone-600">Create new file</h1>
                     <div className="pt-4">
                         <button title="Create New" onClick={()=>handleCreateNewDocument()}>
                             <div className="bg-white border-2 border-stone-200 grid place-content-center text-pink-500 rounded-lg shadow-sm
@@ -47,16 +46,18 @@ export function HomePage(){
                     </div>
                 </div>
             </div>
-            <div className="max-w-[80vw] mx-auto p-5">
-                <h1 className="text-2xl font-semibold text-stone-500">Open recent files</h1>
-                <div className="flex flex-wrap gap-1 pt-4">
-                    {data?.map((doc, index) => (
-                        <LinkFile key={index} file={doc.id}>{doc.name}</LinkFile>
-                    ))}
-                    {data?.length === 0 && 
-                        <div className="text-center text-stone-500 mt-2">No recent files found.</div>
-                    }
-                </div>
+            <div className="bg-white p-3">
+                <div className="max-w-[80vw] mx-auto">
+                    <h1 className="text-2xl font-semibold text-stone-600">Open recent files</h1>
+                    <div className="flex flex-wrap gap-1 pt-4">
+                        {data?.map((doc, index) => (
+                            <LinkFile key={index} file={doc.id}>{doc.name}</LinkFile>
+                        ))}
+                        {data?.length === 0 && 
+                            <div className="text-center text-stone-500 mt-2">No recent files found.</div>
+                        }
+                    </div>
+                </div>                
             </div>
         </div>
     );

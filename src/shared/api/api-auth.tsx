@@ -9,7 +9,12 @@ type AuthContextType = {
   logOut: () => void;
 };
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({
+  token: null,
+  logIn: async () => false,
+  logOut: () => {},
+});
+
 const refreshToken = async () => {
   const response = await api.post("/refresh-token", null, { withCredentials: true });
   return response.data;
@@ -26,6 +31,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null | undefined>(undefined);
   const navigate = useNavigate();
   useEffect(() => {
+    console.log('Token state changed:', token);
     if (token === null) { 
       navigate('/login');
     }
@@ -80,6 +86,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             return api(originalRequest);
           } catch (err) {
             console.error("Refresh token failed", err);
+            navigate('/login');
             setToken(null);
           }
         }
@@ -126,6 +133,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  // if (!ctx) throw new Error('useAuth must be used within AuthProvider');
   return ctx;
 };

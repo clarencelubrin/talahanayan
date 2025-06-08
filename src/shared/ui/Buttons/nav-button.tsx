@@ -26,9 +26,9 @@ type NavToggleProps = {
 };
 export function NavButton({icon: Icon, children, className, id, onClick, onMouseEnter, onMouseLeave, isRounded=true, hasHover=true}: NavButtonProps) {
     return (
-        <button className={`flex items-center gap-2 font-semibold text-left ps-2 pe-3 py-1 text-sm text-stone-500 
-            ${hasHover? 'hover:bg-pink-50 hover:text-pink-500 transition duration-150 ease-in-out' : ''} 
-            ${isRounded? 'rounded-md': ''} truncate ${className}`}
+        <button className={`flex items-center gap-2 font-semibold text-left px-2 py-1 text-sm text-stone-500 
+            ${hasHover? 'hover:bg-pink-50 hover:text-pink-500 active:bg-pink-100 active:text-pink-600 active:translate-y-0.5 transition duration-150 ease-in-out' : ''} 
+            ${isRounded? 'rounded-md': ''} whitespace-none truncate ${className}`}
             onClick={onClick}
             id={id}
             onMouseEnter={onMouseEnter}
