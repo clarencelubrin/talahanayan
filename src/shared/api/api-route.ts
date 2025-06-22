@@ -6,7 +6,7 @@ import { useDataStore } from 'src/store';
 import axios from 'axios';
 import { AppContext } from 'src/App';
 
-export const API_URL = 'https://talahanayan-api.onrender.com';
+export const API_URL = 'https://talahanayan-api.vercel.app';
 export const api = axios.create({
     baseURL: API_URL,
     withCredentials: true,
